@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .result{
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            height: 300px;
+            background-color: rgba(0,0,0,.8);
+            color: white;
+            text-align: center;
+            letter-spacing: 2px;
+            padding-top: 20px;
+            font-size: 18px;
+            line-height: 28px;
+            overflow: scroll;
+        }
+    </style>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<button style="display: block;margin: 20px auto;width: 160px;height: 60px;" onclick="getAll()">查看院系信息</button>
+<div>
+    <label>院系名称：</label><input id="name" type="text">
+    <label>所在位置：</label><input id="location" type="number">
+</div>
+<button style="display: block;margin: 100px auto;width: 160px;height: 60px;" onclick="insertNew()">插入</button>
+<div class="result" id="result"></div>
+<script>
+    function getAll(){
+        $.ajax({
+            type: "get",
+            url: "depart/selectAll",
+            data: {
+            },
+            success:function (data) {
+                console.log(data)
+                $("#result").empty()
+                for(let i = 0;i < data.length;i++){
+                    $("#result").append(JSON.stringify(data[i]) + "<br>")
+                }
+            },
+        });
+    }
+    function insertNew(){
+        const name = document.getElementById('name').value
+        const location = document.getElementById('location').value
+        console.log('输入的信息',name,location)
+        // $.ajax({
+        //     type: "POST",
+        //     url:"depart/insert",
+        //     contentType: 'application/json; charset=UTF-8', // 设置内容类型为JSON
+        //     data:JSON.stringify({ // 将JavaScript对象转换为JSON字符串
+        //         name: name,
+        //         location: location
+        //     }),
+        //     success:data=>{
+        //         console.log(data)
+        //         getAll()
+        //     }
+        // })
+        axios.post('depart/insert',{name:name,location:location})
+            .then(function(response){
+                console.log('response',response)
+                if(response.data){
+                    //提交成功
+                    getAll()
+                }else{
+                    //提交失败
+
+                }
+            })
+            .catch(function(error){
+                console.log(error);
+            });
+
+    }
+
+</script>
+</body>
+</html>
