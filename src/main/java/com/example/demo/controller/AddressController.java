@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 
 import com.example.demo.bean.Address;
+import com.example.demo.bean.SearchParams;
+import com.example.demo.bean.SearchResponse;
 import com.example.demo.service.AddressService;
 import com.example.demo.service.AddressServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,13 @@ public class AddressController {
         List<Address> list = addressService.selectAll();
         return list;
     }
+    @RequestMapping(value = "/selectByPageNum", method = RequestMethod.POST)
+    public SearchResponse selectByPageNum(@RequestBody SearchParams obj) {
+        System.out.println("selectByPageNum"+obj.getStart()+obj.getCount());
+        SearchResponse res = addressService.selectByPageNum(obj.getStart(),obj.getCount());
+        return res;
+    }
+
 
     @PostMapping("insert")
     public Boolean insert(@RequestBody Address obj) {

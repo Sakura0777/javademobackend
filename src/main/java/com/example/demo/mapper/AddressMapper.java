@@ -8,11 +8,21 @@ import java.util.List;
 @Mapper
 public interface AddressMapper {
     @Select({
+            "select count(name) as counts from address"
+    })
+    Integer getAddressCounts();
+    @Select({
             "select",
             "id, name, phone, address",
             "from address"
     })
     List<Address> selectAll();
+    @Select({
+            "select",
+            "id, name, phone, address",
+            "from address limit #{start},#{count}"
+    })
+    List<Address> selectByPageNum(@Param("start")Integer start,@Param("count") Integer count);
     @Insert({
            "INSERT INTO `test`.`address` ( `name`, `phone`,`address`) VALUES ( #{name}, #{phone},#{address});"
     })
